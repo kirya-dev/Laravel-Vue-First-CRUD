@@ -12,21 +12,51 @@ import VueRouter from 'vue-router';
 
 window.Vue.use(VueRouter);
 
-import CompaniesIndex from './components/companies/CompaniesIndex.vue';
-import CompaniesCreate from './components/companies/CompaniesCreate.vue';
-import CompaniesEdit from './components/companies/CompaniesEdit.vue';
+import BooksIndex from './components/books/Index.vue';
+import BooksForm from './components/books/Form.vue';
+
+import AuthorsIndex from './components/authors/Index.vue';
+import AuthorsForm from './components/authors/Form.vue';
+
+import AuthorTypesIndex from './components/author-types/Index.vue';
+import AuthorTypesForm from './components/author-types/Form.vue';
+
+const routerWrapper = { name: 'router-wrapper', template: `<router-view></router-view>` };
 
 const routes = [
     {
-        path: '/',
-        components: {
-            companiesIndex: CompaniesIndex
-        }
+        path: '/admin',
+        redirect: {name: 'indexBook'}
     },
-    {path: '/admin/companies/create', component: CompaniesCreate, name: 'createCompany'},
-    {path: '/admin/companies/edit/:id', component: CompaniesEdit, name: 'editCompany'},
-]
+    {
+        path: '/admin/books',
+        component: routerWrapper,
+        children: [
+            { path: '', component: BooksIndex, name: 'indexBook' },
+            { path: 'create', component: BooksForm, name: 'createBook' },
+            { path: 'edit/:id', component: BooksForm, name: 'editBook' },
+        ]
+    },
+    {
+        path: '/admin/authors',
+        component: routerWrapper,
+        children: [
+            { path: '', component: AuthorsIndex, name: 'indexAuthor' },
+            { path: 'create', component: AuthorsForm, name: 'createAuthor' },
+            { path: 'edit/:id', component: AuthorsForm, name: 'editAuthor' },
+        ]
+    },
+    {
+        path: '/admin/author-types',
+        component: routerWrapper,
+        children: [
+            { path: '', component: AuthorTypesIndex, name: 'indexAuthorType' },
+            { path: 'create', component: AuthorTypesForm, name: 'createAuthorType' },
+            { path: 'edit/:id', component: AuthorTypesForm, name: 'editAuthorType' },
+        ]
+    },
+];
 
-const router = new VueRouter({ routes })
+const router = new VueRouter({ routes, mode: 'history' });
 
-const app = new Vue({ router }).$mount('#app')
+const app = new Vue({ router }).$mount('#app');
